@@ -4,7 +4,7 @@
   Check result and assess whether to pass security gate by findings severity.
      
 .DESCRIPTION  
-  Azure secuirty center (ASC) scan Azure container registry (ACR) images for known vulnerabilities on multiple scenarios including image push. 
+  Azure security center (ASC) scan Azure container registry (ACR) images for known vulnerabilities on multiple scenarios including image push.
  (https://docs.microsoft.com/en-us/azure/security-center/defender-for-container-registries-introduction#when-are-images-scanned)  
   Using this tool you can have a security gate as part of image release(push) or 
   deployment to cluster to check if for image there is existent scan in ASC (for example part following push) - retry ,
@@ -31,18 +31,18 @@
 .PARAMETER mediumFindingsCountFailThreshold
   [optional] 
   Threshold to fail gate on Medium severity findings count in scan (default is 5)
-  ** In the case of High servirty finging gate will always fail.**
+  ** In the case of High severity finging gate will always fail.**
 .PARAMETER lowFindingsCountFailThreshold
   [optional] 
   Threshold to fail gate on Low severity findings count in scan (default is 15)
-  ** In the case of High servirty finging gate will always fail.**
+  ** In the case of High severity finging gate will always fail.**
 .PARAMETER ignoreNonPatchable
   [optional]
-  Flag to set whether to fileter out non patchble findings from report (default is $false)
+  Flag to set whether to filter out non patchable findings from report (default is $false)
   
   
 .EXAMPLE
-	.\ImageScanSummaryAssessmentGate.ps1 -registryName <registryResourceName> -repository <respository> -tag <tag>
+        .\ImageScanSummaryAssessmentGate.ps1 -registryName <registryResourceName> -repository <repository> -tag <tag>
 .EXAMPLE
 	.\ImageScanSummaryAssessmentGate.ps1 -registryName tomerregistry -repository build -tag latest
  
@@ -69,10 +69,10 @@ Param(
 	# Max retries to get image scan summary from ASC.
 	$scanExtractionRetryCount = 3,
 	
-	# Medium servrity findings failure threshold
+        # Medium severity findings failure threshold
 	$mediumFindingsCountFailThreshold = 5,
 	
-	# Low servrity findings failure threshold
+        # Low severity findings failure threshold
 	$lowFindingsCountFailThreshold = 15,
 	
 	# Image tag
@@ -117,7 +117,7 @@ Write-Host "Query: $query"
 # Remove query's new line to use ARG CLI
 $query = $query -replace [Environment]::NewLine,"" -replace "`r`n","" -replace "`n",""
 
-# Get result wit retry policy
+# Get result with retry policy
 $i = 0
 while(($result = az graph query -q $query -o json | ConvertFrom-Json).count -eq 0 -and ($i = $i + 1) -lt $scanExtractionRetryCount)
 { 
@@ -133,8 +133,8 @@ if(!$result -or $result.count -eq 0)
 
 if(!$result -or $result.count -gt 1)
 {
-	Write-Error "Too many rows returnes, unknown issue $imageDigest, investigate retunres result on top ARG"
-	exit 1
+        Write-Error "Too many rows returned, unknown issue $imageDigest, investigate returned result on top ARG"
+        exit 1
 }
 
 # Extract scan summary from result
@@ -148,7 +148,7 @@ if($scanReportRow.IsScanned -ne 1){
 
 if ($ignoreNonPatchable)
 {
-  Write-Host "Notice: Filtering non patchble findings Flag is on! this will be cleared from $($scanReportRow.findingsCountOverAll) findinds overall"
+  Write-Host "Notice: Filtering non patchable findings Flag is on! this will be cleared from $($scanReportRow.findingsCountOverAll) findings overall"
   Write-Host ""
 }
 
@@ -169,7 +169,7 @@ if($scanReport.scanstatus -eq "unhealthy")
 	}
 	else
 	{
-		Write-Warning "Helathy scan result, as vulnerabilities found in image did not surpass thresholds"
+                Write-Warning "Healthy scan result, as vulnerabilities found in image did not surpass thresholds"
 		exit 0
 	}
 }
@@ -178,6 +178,6 @@ elseif($scanReport.scanstatus -eq "healthy"){
 	exit 0
 }
 else{
-	Write-Host "All non Applicable reuslts Scan -> default as all findings non applicable"
+        Write-Host "All non Applicable results Scan -> default as all findings non applicable"
 	exit 0
 }
