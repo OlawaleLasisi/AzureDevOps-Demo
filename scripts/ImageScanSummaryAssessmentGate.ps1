@@ -109,7 +109,7 @@ $query = "securityresources
  | extend IsScanned = iif(findingsCountOverAll > 0, true, false)"
  
 # Add filter to get scan summary for specific provided image
-$filter = "| where imageDigest =~ '$imagedigest' and repository =~ '$repository' and registryResourceName =~ '$registryname'" 
+$filter = "| where imageDigest =~ '$imageDigest' and repository =~ '$repository' and registryResourceName =~ '$registryName'"
 $query  = @($query, $filter) | out-string 
 
 Write-Host "Query: $query"
