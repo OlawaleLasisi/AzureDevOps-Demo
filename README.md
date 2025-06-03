@@ -12,7 +12,7 @@ This project is setup to demo the features of Azure DevOps. Each element is conf
 6. Go forth and code!
 
 # Build and Test
-All testing is done via the pipelines. The Pipeline is defined into stages using Build and Deploy. 
+All testing is done via the pipelines. The pipeline includes a build stage followed by three deployment stages for dev, production on Azure, and production on AWS.
 
 # Contribute
 Feedback is welcome. Please create a branch and open a PR with any suggestions.
