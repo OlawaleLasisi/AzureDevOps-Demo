@@ -6,8 +6,8 @@ pool:
 
 variables:
   IMAGE_REGISTRY_CONNECTION: 'ACR Demo'
-  IMAGE_REGISTRY: 'ADODemo'
-  IMAGE_REPOSITORY: 'adodemo.azurecr.io'
+  IMAGE_REGISTRY: 'adodemo.azurecr.io'
+  IMAGE_REPOSITORY: 'adodemo'
   TAG: '$(Build.BuildId)'
 
 stages:
@@ -18,7 +18,7 @@ stages:
     - task: Docker@2
       inputs:
         containerRegistry: '$(IMAGE_REGISTRY_CONNECTION)'
-        repository: '$(IMAGE_REPOSITORY)'
+        repository: '$(IMAGE_REGISTRY)/$(IMAGE_REPOSITORY)'
         command: 'buildAndPush'
         Dockerfile: '**/Dockerfile'
         tags: '$(TAG)'
@@ -81,4 +81,4 @@ stages:
         sudo chmod 400 $(sshKey.secureFilePath)
         ssh -o StrictHostKeyChecking=no -i $(sshKey.secureFilePath) ubuntu@35.180.100.164 "
           docker ps -aq | xargs docker stop | xargs docker rm &&
-          docker run -d -p 8080:80 $(IMAGE_REPOSITORY)/$(IMAGE_REPOSITORY):$(TAG)"
+          docker run -d -p 8080:80 $(IMAGE_REGISTRY)/$(IMAGE_REPOSITORY):$(TAG)"
