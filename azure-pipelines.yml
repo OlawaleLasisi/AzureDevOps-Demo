@@ -18,7 +18,7 @@ stages:
       - task: Docker@2
         inputs:
           containerRegistry: '$(IMAGE_REGISTRY_CONNECTION)'
-          repository: '$(IMAGE_REPOSITORY)'
+          repository: '$(IMAGE_REGISTRY)/$(IMAGE_REPOSITORY)'
         command: 'buildAndPush'
         Dockerfile: '**/Dockerfile'
         tags: '$(TAG)'
